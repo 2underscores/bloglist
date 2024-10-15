@@ -1,0 +1,12 @@
+{
+    "eslint.format.enable": true,
+    "prettier.enable": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "never"
+    },
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+}
