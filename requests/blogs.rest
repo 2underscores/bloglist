@@ -13,3 +13,6 @@ Content-Type: application/json
     "url": "http://www.johndoe.com",
     "likes": "{{$randomInt 1 100}}"
 }
+
+###
+DELETE http://{{BASE_API_URL}}/blogs/{{BLOG_ID}}

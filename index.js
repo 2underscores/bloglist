@@ -4,8 +4,6 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
-// TODO: API Requests locally
-
 
 const blogSchema = new mongoose.Schema({
   title: String,
@@ -44,6 +42,18 @@ app.post('/api/blogs', (request, response) => {
     .save()
     .then(result => {
       response.status(201).json(result)
+    })
+})
+
+app.delete('/api/blogs/:id', (request, response) => {
+  Blog.findByIdAndDelete(request.params.id)
+    .then((results) => {
+      console.log('Deleted:', results)
+      if (results) {
+        response.status(204).end()
+      } else {
+        response.status(404).end()
+      }
     })
 })
 
