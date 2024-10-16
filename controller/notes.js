@@ -1,20 +1,9 @@
 const express = require('express')
-const mongoose = require('mongoose')
+const Blog = require('../models/note')
 const logger = require('../utils/logger')
 
 const noteRouter = express.Router()
 
-// Model
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
-
-const Blog = mongoose.model('Blog', blogSchema)
-
-// Routes
 noteRouter.get('/api/blogs', (request, response) => {
   Blog
     .find({})
