@@ -1,0 +1,15 @@
+@BLOG_ID=670f7f03667b6ddaee44240d
+@BASE_API_URL=localhost:3003/api
+###
+GET http://{{BASE_API_URL}}/blogs
+
+###
+POST http://{{BASE_API_URL}}/blogs
+Content-Type: application/json
+
+{
+    "title": "My {{$randomInt 1 100}}th blog",
+    "author": "John Doe {{$randomInt 1 100}}",
+    "url": "http://www.johndoe.com",
+    "likes": "{{$randomInt 1 100}}"
+}
