@@ -3,6 +3,9 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+const morgan = require('morgan')
+// TODO: API Requests locally
+
 
 const blogSchema = new mongoose.Schema({
   title: String,
@@ -23,6 +26,7 @@ mongoose.connect(mongoUrl)
 
 app.use(cors())
 app.use(express.json())
+app.use(morgan('tiny'))
 
 app.get('/api/blogs', (request, response) => {
   Blog
