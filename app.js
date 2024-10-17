@@ -8,6 +8,7 @@ const logger = require('./utils/logger')
 const noteRouter = require('./controller/notes')
 
 // Connect to MongoDB
+// TODO: Connect in-mem DB if NODE_ENV=test
 const { MONGO_USER: USER, MONGO_PASSWORD: PASS, MONGO_CLUSTER: CLUSTER, MONGO_TABLE: TABLE } = config
 const mongoUrl = `mongodb+srv://${USER}:${PASS}@${CLUSTER}.ljiec.mongodb.net/${TABLE}?retryWrites=true&w=majority&appName=${CLUSTER}`
 logger.info('connecting to MongoDB at ', mongoUrl)

@@ -4,9 +4,9 @@
   "description": "List of saved blogs with user likes",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "node --test",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env  NODE_ENV=test node --test",
     "lint": "eslint ."
   },
   "repository": {
@@ -21,6 +21,8 @@
   "homepage": "https://github.com/2underscores/bloglist#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "crossenv": "^0.0.2-security",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mongoose": "^8.7.1",
@@ -31,6 +33,7 @@
     "@stylistic/eslint-plugin-js": "^2.9.0",
     "eslint": "^9.12.0",
     "globals": "^15.11.0",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "supertest": "^7.0.0"
   }
 }

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// TODO: Schema validation
 const blogSchema = new mongoose.Schema({
   title: String,
   author: String,
@@ -7,6 +8,6 @@ const blogSchema = new mongoose.Schema({
   likes: Number
 })
 
-// TODO:
+// TODO: toJSON strip __v, _id->id
 
 module.exports = mongoose.model('Blog', blogSchema)
