@@ -34,6 +34,6 @@ noteRouter.delete('/api/blogs/:id', (request, response) => {
     })
 })
 
-// TODO: Note.deleteMany({})
+// TODO: Blog.deleteMany({})
 
 module.exports = noteRouter

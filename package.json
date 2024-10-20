@@ -7,7 +7,8 @@
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "test": "cross-env  NODE_ENV=test node --test",
-    "test:watch": "cross-env  NODE_ENV=test node --test --watch",
+    "test:watch:crossenv": "cross-env  NODE_ENV=test node --test --watch",
+    "test:watch": "NODE_ENV=test node --test --watch",
     "lint": "eslint ."
   },
   "repository": {
