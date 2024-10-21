@@ -33,16 +33,10 @@ blogRouter.put('/api/blogs/:id/likes', async (request, response) => {
   response.status(200).json(updatedBlog)
 })
 
-blogRouter.delete('/api/blogs/:id', (request, response) => {
-  Blog.findByIdAndDelete(request.params.id)
-    .then((results) => {
-      logger.info('Deleted:', results)
-      if (results) {
-        response.status(204).end()
-      } else {
-        response.status(404).end()
-      }
-    })
+blogRouter.delete('/api/blogs/:id', async (request, response) => {
+  const res = await Blog.findByIdAndDelete(request.params.id)
+  const code = res ? 204 : 404
+  response.status(code).end()
 })
 
 // TODO: Blog.deleteMany({})

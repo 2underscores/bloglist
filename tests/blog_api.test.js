@@ -69,10 +69,10 @@ describe('Creating blogs', (() => {
     const beforeBlogs = await db.get()
     const template = testData.blogsOne[0]
     const { url, ...noUrl } = { ...template }
-    const { author, ...noAuthor } = { ...template }
+    const { title, ...noTitle } = { ...template }
     const { likes, ...noLikes } = { ...template }
     await api.post('/api/blogs').send(noUrl).expect(400)
-    await api.post('/api/blogs').send(noAuthor).expect(400)
+    await api.post('/api/blogs').send(noTitle).expect(400)
     const zeroLikes = await api.post('/api/blogs').send(noLikes).expect(201)
     assert.strictEqual(zeroLikes.body.likes, 0)
     const afterBlogs = await db.get()
