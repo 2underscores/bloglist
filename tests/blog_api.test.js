@@ -7,7 +7,7 @@ const { db, testData } = require('./test_helper')
 const logger = require('../utils/logger')
 
 const api = supertest(app)
-// TODO: Switch to a testing DB!
+//: Switch to a testing DB!
 beforeEach(async () => {
   await db.reset(testData.blogsMany)
 })
@@ -65,7 +65,7 @@ describe('Creating blogs', (() => {
     assert(afterBlogs.map(b => b.url).includes(newBlog.url))
   })
 
-  test.todo('Blog creation rejects bad payloads, defaults likes to 0', async () => {
+  test('Blog creation rejects bad payloads, defaults likes to 0', async () => {
     const beforeBlogs = await db.get()
     const template = testData.blogsOne[0]
     const { url, ...noUrl } = { ...template }
@@ -81,10 +81,12 @@ describe('Creating blogs', (() => {
 }))
 
 describe('Removing blogs', (() => {
-  test.todo('Can delete blog, get 204 or 404', async () => {
+  test('Can delete blog, get 204 or 404', async () => {
     const beforeBlogs = await db.get()
+    const deleteId = beforeBlogs[0].id
     const fakeId = '6716adfd34cac8f3cbbbbbbb'
-    await api.delete(`/api/blogs/${beforeBlogs[0].id}`).expect(204)
+    await api.delete(`/api/blogs/${deleteId}`).expect(204)
+    await api.delete(`/api/blogs/${deleteId}`).expect(404)
     await api.delete(`/api/blogs/${fakeId}`).expect(404)
     const afterBlogs = await db.get()
     assert.strictEqual(afterBlogs.length, beforeBlogs.length - 1)
