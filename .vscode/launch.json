@@ -2,23 +2,23 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch via NPM",
       "type": "node",
       "request": "launch",
-      "name": "Run Tests",
-      "program": "${workspaceFolder}/node_modules/.bin/cross-env",
-      "args": [
-        "NODE_ENV=test",
-        "node",
-        "--test"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
       "runtimeArgs": [
-        "--inspect-brk"
+        "run-script",
+        "debug",
+        "--inspect"
       ],
-      "skipFiles": [
-        "<node_internals>/**"
-      ]
-    }
+      // "port": 5858
+    },
+    {
+      "command": "npm run test:watch",
+      "name": "Test Watch",
+      "request": "launch",
+      "type": "node-terminal"
+    },
   ]
 }

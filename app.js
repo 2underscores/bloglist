@@ -19,7 +19,7 @@ mongoose.connect(mongoUrl)
 // Middleware
 app.use(cors())
 app.use(express.json())
-app.use(morgan('tiny'))
+// app.use(morgan('tiny'))
 app.use(noteRouter)
 
 module.exports = app

@@ -13,12 +13,34 @@ noteRouter.get('/api/blogs', (request, response) => {
     })
 })
 
+noteRouter.get('/api/blogs/:id', (request, response) => {
+  Blog
+    .findById(request.params.id)
+    .then(blog => {
+      if (blog) {
+        response.json(blog)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(e => {
+      if (e.message.startsWith('Cast to ObjectId failed')) {
+        response.status(404).end()
+      } else { throw e }
+    })
+})
+
 noteRouter.post('/api/blogs', (request, response) => {
   const blog = new Blog(request.body)
   blog
     .save()
     .then(result => {
       response.status(201).json(result)
+    })
+    .catch(e => {
+      if (e.message.startsWith('Blog validation failed')) {
+        response.status(400).send(e.message)
+      }
     })
 })
 

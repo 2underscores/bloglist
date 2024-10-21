@@ -4,10 +4,9 @@
   "description": "List of saved blogs with user likes",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index.js",
+    "start": "cross-env =production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env  NODE_ENV=test node --test",
-    "test:watch:crossenv": "cross-env  NODE_ENV=test node --test --watch",
+    "test": "cross-env NODE_ENV=test node --test",
     "test:watch": "NODE_ENV=test node --test --watch",
     "lint": "eslint ."
   },

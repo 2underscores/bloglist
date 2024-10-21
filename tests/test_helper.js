@@ -43,18 +43,13 @@ const initData = async (blogs) => {
   )
 }
 
-const recurse = (n) => {
-  if (n > 0) {
-    const low = recurse(n - 1)
-  }
-  else {
-    return n
-  }
-}
-
-const setData = async (blogs) => {
+const resetData = async (blogs) => {
   await clearData()
   return await initData(blogs)
+}
+
+const getData = async () => {
+  return await Blog.find({})
 }
 
 module.exports = {
@@ -62,6 +57,7 @@ module.exports = {
   db: {
     clear: clearData,
     set: initData,
-    reset: setData
+    reset: resetData,
+    get: getData
   }
 }
