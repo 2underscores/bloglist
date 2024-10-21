@@ -89,7 +89,17 @@ describe('Removing blogs', (() => {
     const afterBlogs = await db.get()
     assert.strictEqual(afterBlogs.length, beforeBlogs.length - 1)
   })
+}))
 
+describe('Like blogs', (() => {
+  test('Can like a blog', async () => {
+    const beforeBlogs = await db.get()
+    const blog = beforeBlogs[0]
+    const likedBlog = await api.put(`/api/blogs/${blog.id}/likes`).expect(200)
+    assert.strictEqual(likedBlog.body.likes, blog.likes + 1)
+    const afterBlogs = await db.get()
+    assert.strictEqual(afterBlogs.length, beforeBlogs.length)
+  })
 }))
 
 after(async () => {

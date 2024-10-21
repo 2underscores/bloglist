@@ -44,6 +44,14 @@ noteRouter.post('/api/blogs', (request, response) => {
     })
 })
 
+noteRouter.put('/api/blogs/:id/likes', async (request, response) => {
+  // Hmmmm, can't unlike
+  const blog = await Blog.findById(request.params.id)
+  blog.likes += 1
+  const updatedBlog = await blog.save()
+  response.status(200).json(updatedBlog)
+})
+
 noteRouter.delete('/api/blogs/:id', (request, response) => {
   Blog.findByIdAndDelete(request.params.id)
     .then((results) => {
