@@ -4,7 +4,7 @@ const listHelper = require('../utils/list_helper')
 const { testData: { blogsNone, blogsOne, blogsMany } } = require('./test_helper')
 
 
-// TODO: Add list with a non-note object? More a TS thing.... Pass undefined or some other object
+// TODO: Add list with a non-blog object? More a TS thing.... Pass undefined or some other object
 describe('Able sum all likes in blogs', () => {
   test('No blogs', () => {
     assert.strictEqual(listHelper.totalLikes(blogsNone), 0)

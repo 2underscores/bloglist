@@ -1,11 +1,12 @@
 const config = require('./utils/config')
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 const logger = require('./utils/logger')
-const noteRouter = require('./controller/notes')
+const blogRouter = require('./controller/blogs')
 
 // Connect to MongoDB
 // TODO: Connect in-mem DB if NODE_ENV=test
@@ -19,7 +20,22 @@ mongoose.connect(mongoUrl)
 // Middleware
 app.use(cors())
 app.use(express.json())
-// app.use(morgan('tiny'))
-app.use(noteRouter)
+app.use(morgan('tiny'))
+app.use(blogRouter)
+
+const errorMiddleware = (error, request, response, next) => {
+  logger.error(error.message)
+  if (error.name === 'CastError') {
+    return response.status(404).send({ error: 'malformed id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).send({ error: error.message })
+  } else {
+    console.log('Uncaught error:', error)
+    next(error)
+  }
+}
+
+
+app.use(errorMiddleware)
 
 module.exports = app
