@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { use } = require('../app')
 
 // TODO: Schema validation
 const blogSchema = new mongoose.Schema({
@@ -18,6 +19,11 @@ const blogSchema = new mongoose.Schema({
     type: Number,
     required: false,
     default: 0
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   toJSON: {

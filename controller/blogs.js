@@ -1,6 +1,7 @@
 const express = require('express')
 const Blog = require('../models/blog')
 const logger = require('../utils/logger')
+const User = require('../models/user')
 
 const blogRouter = express.Router()
 
@@ -20,9 +21,12 @@ blogRouter.get('/api/blogs/:id', async (request, response) => {
 })
 
 blogRouter.post('/api/blogs', async (request, response) => {
-  const blog = new Blog(request.body)
-  const result = await blog.save()
-  response.status(201).json(result)
+  const body = request.body
+  const user = await User.findById(body.userId) // Err if user not exist
+  const blog = new Blog(body) // Might need more explicit mapping (PURE Crud atm)
+  const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  response.status(201).json(savedBlog)
 })
 
 blogRouter.put('/api/blogs/:id/likes', async (request, response) => {

@@ -16,3 +16,18 @@ Content-Type: application/json
 
 ###
 DELETE http://{{BASE_API_URL}}/blogs/{{BLOG_ID}}
+
+
+
+### USERS
+GET http://{{BASE_API_URL}}/users
+
+###
+POST http://{{BASE_API_URL}}/users
+Content-Type: application/json
+
+{
+    "username": "johndoe{{$randomInt 1 100}}",
+    "name": "John Doe",
+    "password": "password{{$randomInt 1 100}}"
+}

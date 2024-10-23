@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env =production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "dev:test": "cross-env NODE_ENV=test nodemon index.js",
     "test": "cross-env NODE_ENV=test node --test",
     "test:watch": "NODE_ENV=test node --test --watch",
     "lint": "eslint ."
@@ -21,6 +22,7 @@
   },
   "homepage": "https://github.com/2underscores/bloglist#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "crossenv": "^0.0.2-security",

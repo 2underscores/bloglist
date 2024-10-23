@@ -1,4 +1,8 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const config = require('../utils/config')
+const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 
 // Test data
 const blogsNone = []
@@ -33,19 +37,38 @@ const blogsMany = [
   }
 ]
 
+const userOne = {
+  username: `blogTesUser${crypto.randomBytes(2).toString('hex')}`,
+  password: `testpassword1233`,
+}
+
 const clearData = async () => {
-  return await Blog.deleteMany({})
+  const userDelete = await User.deleteMany({})
+  const blogDelete = await Blog.deleteMany({})
+  return { userDelete, blogDelete }
 }
 
 const initData = async (blogs) => {
-  return await Promise.all(
-    blogs.map(b => Blog(b).save())
+  // User to link blogs to
+  const userSaved = await User({
+    username: userOne.username,
+    passwordHash: await bcrypt.hash(userOne.password, 1)
+  }).save()
+  // Blogs
+  const blogsSaved = await Promise.all(
+    blogs.map(b => Blog({ ...b, ...{ user: userSaved.id } }).save())
   )
+  // Link blogs in user
+  const blogIds = blogsSaved.map(b => b.id)
+  userSaved.blogs = userSaved.blogs.concat(blogIds) // Concat unnecessary but whatever
+  const userResaved = await userSaved.save()
+  return { userResaved, blogsSaved }
 }
 
 const resetData = async (blogs) => {
   await clearData()
-  return await initData(blogs)
+  const data = await initData(blogs)
+  return data
 }
 
 const getData = async () => {

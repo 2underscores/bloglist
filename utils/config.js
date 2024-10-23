@@ -10,5 +10,6 @@ module.exports = {
     PASSWORD: process.env.MONGO_PASSWORD,
     CLUSTER: process.env.MONGO_CLUSTER,
     TABLE: ENV === 'test' ? process.env.MONGO_TABLE_TEST : process.env.MONGO_TABLE, //Will be a more re-usable pattern. TODO: don't default prod
-  }
+  },
+  SALT_ROUNDS: ENV === 'test' ? 1 : process.env.SALT_ROUNDS,
 }

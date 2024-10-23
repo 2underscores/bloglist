@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const logger = require('./utils/logger')
 const blogRouter = require('./controller/blogs')
+const userRouter = require('./controller/users')
 
 // Connect to MongoDB
 // TODO: Connect in-mem DB if NODE_ENV=test (current a separate table)
@@ -20,10 +21,12 @@ mongoose.connect(mongoUrl)
 // Middleware
 app.use(cors())
 app.use(express.json())
-if (config.ENV !== 'test') {
-  app.use(morgan('tiny'))
-}
+// if (config.ENV !== 'test') {
+//   app.use(morgan('tiny'))
+// }
+app.use(morgan('tiny')) // FIXME: move back to conditional, just here for debugging. Also in logger.js
 app.use(blogRouter)
+app.use(userRouter)
 
 const errorMiddleware = (error, request, response, next) => {
   logger.error(error.message)
