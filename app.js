@@ -9,9 +9,9 @@ const logger = require('./utils/logger')
 const blogRouter = require('./controller/blogs')
 
 // Connect to MongoDB
-// TODO: Connect in-mem DB if NODE_ENV=test
-const { MONGO_USER: USER, MONGO_PASSWORD: PASS, MONGO_CLUSTER: CLUSTER, MONGO_TABLE: TABLE } = config
-const mongoUrl = `mongodb+srv://${USER}:${PASS}@${CLUSTER}.ljiec.mongodb.net/${TABLE}?retryWrites=true&w=majority&appName=${CLUSTER}`
+// TODO: Connect in-mem DB if NODE_ENV=test (current a separate table)
+const { MONGO } = config
+const mongoUrl = `mongodb+srv://${MONGO.USER}:${MONGO.PASSWORD}@${MONGO.CLUSTER}.ljiec.mongodb.net/${MONGO.TABLE}?retryWrites=true&w=majority&appName=${MONGO.CLUSTER}`
 logger.info('connecting to MongoDB at ', mongoUrl)
 mongoose.connect(mongoUrl)
   .then(() => { logger.info('connected to MongoDB)') })
@@ -22,6 +22,7 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(blogRouter)
+
 
 const errorMiddleware = (error, request, response, next) => {
   logger.error(error.message)
