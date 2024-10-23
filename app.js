@@ -20,9 +20,10 @@ mongoose.connect(mongoUrl)
 // Middleware
 app.use(cors())
 app.use(express.json())
-app.use(morgan('tiny'))
+if (config.ENV !== 'test') {
+  app.use(morgan('tiny'))
+}
 app.use(blogRouter)
-
 
 const errorMiddleware = (error, request, response, next) => {
   logger.error(error.message)
