@@ -33,8 +33,6 @@ describe('User Management', () => {
     assert.strictEqual(userResp.body.username, newUser.username)
     assert.strictEqual(afterUsers.length, initialUsers.length + 1)
   })
-
-
   test('Cannot create duplicate user', async () => {
     const initialUsers = await helper.getAllUsers()
     const newUser = { ...helper.testUsers[0] }
@@ -44,7 +42,6 @@ describe('User Management', () => {
     assert.strictEqual(userResp.status, 500) // TODO: Return duplicate message, better status code
     assert.strictEqual(afterUsers.length, initialUsers.length)
   })
-
 })
 
 after(async () => {
