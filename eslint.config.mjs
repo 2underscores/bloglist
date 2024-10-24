@@ -26,6 +26,7 @@ export default [
       'object-curly-spacing': ['warn', 'always'],
       'arrow-spacing': ['warn', { 'before': true, 'after': true },],
       'no-console': 'off',
+      "no-unused-vars": ["error", { "varsIgnorePattern": "^_" }],
     },
   },
   { ignores: ["dist/**", "build/**"], },

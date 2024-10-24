@@ -107,7 +107,7 @@ const getAllBlogs = async () => {
 }
 
 const getAllUsers = async () => {
-  return await Blog.find({})
+  return await User.find({})
 }
 
 const clearData = async () => {

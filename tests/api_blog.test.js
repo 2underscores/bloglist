@@ -7,7 +7,7 @@ const helper = require('./test_helper')
 
 const api = supertest(app)
 //: Switch to a testing DB!
-let user, blogs, attached
+let user, blogs // Bad pattern, tests clobber each other, can't un in parallel
 
 beforeEach(async () => {
   await helper.clearData()
@@ -72,9 +72,9 @@ describe('Creating blogs', (() => {
   test('Blog creation rejects bad payloads, defaults likes to 0', async () => {
     const beforeBlogs = await helper.getAllBlogs()
     const template = { ...helper.testBlogs[0], ...{ user: user.id } }
-    const { url, ...noUrl } = { ...template }
-    const { title, ...noTitle } = { ...template }
-    const { likes, ...noLikes } = { ...template }
+    const { url: _u, ...noUrl } = { ...template }
+    const { title: _t, ...noTitle } = { ...template }
+    const { likes: _l, ...noLikes } = { ...template }
     await api.post('/api/blogs').send(noUrl).expect(400)
     await api.post('/api/blogs').send(noTitle).expect(400)
     const zeroLikes = await api.post('/api/blogs').send(noLikes).expect(201)
