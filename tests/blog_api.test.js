@@ -7,9 +7,14 @@ const helper = require('./test_helper')
 
 const api = supertest(app)
 //: Switch to a testing DB!
+let user, blogs, attached
+
 beforeEach(async () => {
   await helper.clearData()
-  await helper.injectManyBlogs(helper.testBlogs)
+  user = (await helper.injectUsers([helper.testUsers[0]]))[0]
+  blogs = await helper.injectBlogs(helper.testBlogs)
+  const attached = await helper.attachBlogsToUser(blogs, user);
+  ({ user, blogs } = attached)
 })
 
 describe('Listing blogs', (() => {
@@ -57,7 +62,7 @@ describe('Getting specific blogs', (() => {
 describe('Creating blogs', (() => {
   test('Can create new blog', async () => {
     const beforeBlogs = await helper.getAllBlogs()
-    const newBlog = helper.testBlogs[0]
+    const newBlog = { ...helper.testBlogs[0], ...{ user: user.id } }
     await api.post('/api/blogs').send(newBlog).expect(201)
     const afterBlogs = await helper.getAllBlogs()
     assert.strictEqual(afterBlogs.length, beforeBlogs.length + 1)
@@ -66,7 +71,7 @@ describe('Creating blogs', (() => {
 
   test('Blog creation rejects bad payloads, defaults likes to 0', async () => {
     const beforeBlogs = await helper.getAllBlogs()
-    const template = helper.testBlogs[0]
+    const template = { ...helper.testBlogs[0], ...{ user: user.id } }
     const { url, ...noUrl } = { ...template }
     const { title, ...noTitle } = { ...template }
     const { likes, ...noLikes } = { ...template }

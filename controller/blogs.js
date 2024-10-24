@@ -22,8 +22,15 @@ blogRouter.get('/api/blogs/:id', async (request, response) => {
 
 blogRouter.post('/api/blogs', async (request, response) => {
   const body = request.body
-  const user = await User.findById(body.userId) // Err if user not exist
-  const blog = new Blog(body) // Might need more explicit mapping (PURE Crud atm)
+  const user = await User.findById(body.user) // Err if user not exist
+  const newBlog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes || 0,
+    user: user.id
+  }
+  const blog = new Blog(newBlog)
   const savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()

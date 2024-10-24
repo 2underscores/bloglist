@@ -35,7 +35,7 @@ const errorMiddleware = (error, request, response, next) => {
   } else if (error.name === 'ValidationError') {
     return response.status(400).send({ error: error.message })
   } else {
-    console.log('Uncaught error:', error)
+    logger.error('Uncaught error:', error)
     next(error)
   }
 }

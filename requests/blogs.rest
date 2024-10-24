@@ -11,7 +11,8 @@ Content-Type: application/json
     "title": "My {{$randomInt 1 100}}th blog",
     "author": "John Doe {{$randomInt 1 100}}",
     "url": "http://www.johndoe.com",
-    "likes": "{{$randomInt 1 100}}"
+    "likes": "{{$randomInt 1 100}}",
+    "user": "671aad8dd6f110e996b1929b"
 }
 
 ###

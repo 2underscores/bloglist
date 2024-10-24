@@ -60,6 +60,7 @@ const generateMockUser = async (partialUserObject) => {
   return { ...template, ...partialUserObject }
 }
 
+// Users
 const injectUser = async (testUser) => {
   const userSaved = await User({
     username: testUser.username,
@@ -67,7 +68,14 @@ const injectUser = async (testUser) => {
   }).save()
   return userSaved
 }
+const injectUsers = async (testUsers) => {
+  const usersSaved = await Promise.all(
+    testUsers.map(u => injectUser(u))
+  )
+  return usersSaved
+}
 
+// Blogs
 const injectBlog = async (testblog) => {
   const blogSaved = await Blog({
     ...testblog,
@@ -75,27 +83,23 @@ const injectBlog = async (testblog) => {
   }).save()
   return blogSaved
 }
-
-const attachBlogToUser = async (user, blog) => {
-  blog.user = user.id
-  const blogSaved = blog.save()
-  user.blogs = user.blogs.concat(blog.id)
-  const userSaved = user.save()
-  return { user: userSaved, blog: blogSaved }
-}
-
-const injectManyBlogs = async (testBlogs) => {
+const injectBlogs = async (testBlogs) => {
   const blogsSaved = await Promise.all(
     testBlogs.map(b => injectBlog(b))
   )
   return blogsSaved
 }
 
-const injectManyUsers = async (testUsers) => {
-  const usersSaved = await Promise.all(
-    testUsers.map(u => injectUser(u))
-  )
-  return usersSaved
+const attachBlogsToUser = async (blogs, user) => {
+  // Two write to DB so can't same single attach blog or faile
+  const blogsAttached = await Promise.all(
+    blogs.map(b => {
+      b.user = user.id
+      return b.save()
+    }))
+  user.blogs = user.blogs.concat(blogs.map(b => b.id))
+  const userSaved = await user.save()
+  return { user: userSaved, blogs: blogsAttached }
 }
 
 const getAllBlogs = async () => {
@@ -115,12 +119,11 @@ const clearData = async () => {
 module.exports = {
   testBlogs,
   testUsers,
-  injectBlog,
-  injectManyBlogs,
-  injectUser,
-  injectManyUsers,
-  attachBlogToUser,
+  injectBlogs,
+  injectUsers,
+  attachBlogsToUser,
   getAllBlogs,
   getAllUsers,
   clearData,
+  generateMockUser,
 }
