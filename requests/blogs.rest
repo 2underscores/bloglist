@@ -1,6 +1,33 @@
 @BLOG_ID=670f7f03667b6ddaee44240d
 @BASE_API_URL=localhost:3003/api
+
+@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UyMiIsImlkIjoiNjcxYWNlY2U3YTk5Y2NlZTRkZjIwYTVmIiwiaWF0IjoxNzI5ODEzMDU3fQ.BXjlsetEiL4S7Qx-UYtqj3gL5vVosZyN2tE4hvzx6f0
+
+### USERS
+GET http://{{BASE_API_URL}}/users
+Authorization: Bearer {{TOKEN}}
+
 ###
+POST http://{{BASE_API_URL}}/users
+Content-Type: application/json
+
+{
+    "username": "johndoe{{$randomInt 1 100}}",
+    "name": "John Doe",
+    // "password": "password{{$randomInt 1 100}}"
+    "password": "passwordtest"
+}
+
+### AUTH
+POST http://{{BASE_API_URL}}/login
+Content-Type: application/json
+
+{
+    "username": "johndoe22",
+    "password": "passwordtest"
+}
+
+### BLOGS
 GET http://{{BASE_API_URL}}/blogs
 
 ###
@@ -17,18 +44,3 @@ Content-Type: application/json
 
 ###
 DELETE http://{{BASE_API_URL}}/blogs/{{BLOG_ID}}
-
-
-
-### USERS
-GET http://{{BASE_API_URL}}/users
-
-###
-POST http://{{BASE_API_URL}}/users
-Content-Type: application/json
-
-{
-    "username": "johndoe{{$randomInt 1 100}}",
-    "name": "John Doe",
-    "password": "password{{$randomInt 1 100}}"
-}

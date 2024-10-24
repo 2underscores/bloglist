@@ -8,6 +8,7 @@ const morgan = require('morgan')
 const logger = require('./utils/logger')
 const blogRouter = require('./controller/blogs')
 const userRouter = require('./controller/users')
+const loginRouter = require('./controller/login')
 
 // Connect to MongoDB
 // TODO: Connect in-mem DB if NODE_ENV=test (current a separate table)
@@ -25,8 +26,9 @@ if (config.ENV !== 'test') {
   app.use(morgan('tiny'))
 }
 // app.use(morgan('tiny')) // FIXME: move back to conditional, just here for debugging. Also in logger.js
-app.use(blogRouter)
-app.use(userRouter)
+app.use('/api/blogs', blogRouter)
+app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
 
 const errorMiddleware = (error, request, response, next) => {
   logger.error(error.message)
@@ -34,6 +36,8 @@ const errorMiddleware = (error, request, response, next) => {
     return response.status(404).send({ error: 'malformed id' })
   } else if (error.name === 'ValidationError') {
     return response.status(400).send({ error: error.message })
+  } else if (error.name === 'InvalidToken' || error.name === 'JsonWebTokenError') {
+    return response.status(401).json({ error: 'invalid token' })
   } else {
     logger.error('Uncaught error:', error)
     next(error)

@@ -5,13 +5,13 @@ const User = require('../models/user')
 
 const blogRouter = express.Router()
 
-blogRouter.get('/api/blogs', async (request, response) => {
-  const blogs = await Blog.find({})
+blogRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({}).populate('user', { username: 1 })
   logger.info(`Retrieved ${blogs.length} blogs`)
   response.json(blogs)
 })
 
-blogRouter.get('/api/blogs/:id', async (request, response) => {
+blogRouter.get('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   if (blog) {
     response.json(blog)
@@ -20,7 +20,7 @@ blogRouter.get('/api/blogs/:id', async (request, response) => {
   }
 })
 
-blogRouter.post('/api/blogs', async (request, response) => {
+blogRouter.post('/', async (request, response) => {
   const body = request.body
   const user = await User.findById(body.user) // Err if user not exist
   const newBlog = {
@@ -37,7 +37,7 @@ blogRouter.post('/api/blogs', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-blogRouter.put('/api/blogs/:id/likes', async (request, response) => {
+blogRouter.put('/:id/likes', async (request, response) => {
   // Hmmmm, can't unlike
   const blog = await Blog.findById(request.params.id)
   blog.likes += 1
@@ -45,7 +45,7 @@ blogRouter.put('/api/blogs/:id/likes', async (request, response) => {
   response.status(200).json(updatedBlog)
 })
 
-blogRouter.delete('/api/blogs/:id', async (request, response) => {
+blogRouter.delete('/:id', async (request, response) => {
   const res = await Blog.findByIdAndDelete(request.params.id)
   const code = res ? 204 : 404
   response.status(code).end()

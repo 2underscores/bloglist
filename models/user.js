@@ -15,6 +15,12 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Blog'
   }]
+}, {
+  toJSON: {
+    transform: (doc, ret) => {
+      ret.id = ret._id
+    }
+  }
 })
 
 const User = mongoose.model('User', userSchema)
