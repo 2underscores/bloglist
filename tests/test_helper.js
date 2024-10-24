@@ -1,19 +1,10 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
-const config = require('../utils/config')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 
 // Test data
-const blogsNone = []
-const blogsOne = [
-  {
-    title: 'title 1',
-    author: 'author 1',
-    url: 'url 1',
-    likes: 1,
-  }]
-const blogsMany = [
+const testBlogs = [
   {
     title: 'title 1',
     author: 'author 1',
@@ -37,9 +28,82 @@ const blogsMany = [
   }
 ]
 
-const userOne = {
-  username: `blogTesUser${crypto.randomBytes(2).toString('hex')}`,
-  password: `testpassword1233`,
+const testUsers = [
+  {
+    username: 'TestUser1',
+    password: 'password1',
+  }, {
+    username: 'TestUser2',
+    password: 'password2',
+  }, {
+    username: 'TestUser3',
+    password: 'password3',
+  }
+]
+
+const generatePasswordHash = async (password = undefined, saltRounds = 1) => {
+  password = password ? password : crypto.randomBytes(16).toString('hex')
+  const hash = await bcrypt.hash(password, saltRounds)
+  return { password, hash }
+}
+
+const generateMockMongoId = () => {
+  return crypto.randomBytes(12).toString('hex')
+}
+
+const generateMockUser = async (partialUserObject) => {
+  const template = {
+    _id: generateMockMongoId(),
+    passwordHash: (await generatePasswordHash()).hash,
+    username: crypto.randomBytes(4).toString('hex'),
+  }
+  return { ...template, ...partialUserObject }
+}
+
+const injectUser = async (testUser) => {
+  const userSaved = await User({
+    username: testUser.username,
+    passwordHash: (await generatePasswordHash()).hash,
+  }).save()
+  return userSaved
+}
+
+const injectBlog = async (testblog) => {
+  const blogSaved = await Blog({
+    ...testblog,
+    ...{ user: generateMockMongoId() },
+  }).save()
+  return blogSaved
+}
+
+const attachBlogToUser = async (user, blog) => {
+  blog.user = user.id
+  const blogSaved = blog.save()
+  user.blogs = user.blogs.concat(blog.id)
+  const userSaved = user.save()
+  return { user: userSaved, blog: blogSaved }
+}
+
+const injectManyBlogs = async (testBlogs) => {
+  const blogsSaved = await Promise.all(
+    testBlogs.map(b => injectBlog(b))
+  )
+  return blogsSaved
+}
+
+const injectManyUsers = async (testUsers) => {
+  const usersSaved = await Promise.all(
+    testUsers.map(u => injectUser(u))
+  )
+  return usersSaved
+}
+
+const getAllBlogs = async () => {
+  return await Blog.find({})
+}
+
+const getAllUsers = async () => {
+  return await Blog.find({})
 }
 
 const clearData = async () => {
@@ -48,39 +112,15 @@ const clearData = async () => {
   return { userDelete, blogDelete }
 }
 
-const initData = async (blogs) => {
-  // User to link blogs to
-  const userSaved = await User({
-    username: userOne.username,
-    passwordHash: await bcrypt.hash(userOne.password, 1)
-  }).save()
-  // Blogs
-  const blogsSaved = await Promise.all(
-    blogs.map(b => Blog({ ...b, ...{ user: userSaved.id } }).save())
-  )
-  // Link blogs in user
-  const blogIds = blogsSaved.map(b => b.id)
-  userSaved.blogs = userSaved.blogs.concat(blogIds) // Concat unnecessary but whatever
-  const userResaved = await userSaved.save()
-  return { userResaved, blogsSaved }
-}
-
-const resetData = async (blogs) => {
-  await clearData()
-  const data = await initData(blogs)
-  return data
-}
-
-const getData = async () => {
-  return await Blog.find({})
-}
-
 module.exports = {
-  testData: { blogsNone, blogsOne, blogsMany },
-  db: {
-    clear: clearData,
-    set: initData,
-    reset: resetData,
-    get: getData
-  }
+  testBlogs,
+  testUsers,
+  injectBlog,
+  injectManyBlogs,
+  injectUser,
+  injectManyUsers,
+  attachBlogToUser,
+  getAllBlogs,
+  getAllUsers,
+  clearData,
 }

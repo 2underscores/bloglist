@@ -21,10 +21,10 @@ mongoose.connect(mongoUrl)
 // Middleware
 app.use(cors())
 app.use(express.json())
-// if (config.ENV !== 'test') {
-//   app.use(morgan('tiny'))
-// }
-app.use(morgan('tiny')) // FIXME: move back to conditional, just here for debugging. Also in logger.js
+if (config.ENV !== 'test') {
+  app.use(morgan('tiny'))
+}
+// app.use(morgan('tiny')) // FIXME: move back to conditional, just here for debugging. Also in logger.js
 app.use(blogRouter)
 app.use(userRouter)
 

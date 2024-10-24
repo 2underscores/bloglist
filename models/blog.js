@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { use } = require('../app')
 
 // TODO: Schema validation
 const blogSchema = new mongoose.Schema({
