@@ -1,10 +1,29 @@
 @BLOG_ID=670f7f03667b6ddaee44240d
 @BASE_API_URL=localhost:3003/api
 
-@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UyMiIsImlkIjoiNjcxYWNlY2U3YTk5Y2NlZTRkZjIwYTVmIiwiaWF0IjoxNzI5ODEzMDU3fQ.BXjlsetEiL4S7Qx-UYtqj3gL5vVosZyN2tE4hvzx6f0
+@USERNAME=johndoe2
+@PASSWORD=passwordtest
+@USER_ID=671c083a68d6cd60f6060775
+@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MWMwODNhNjhkNmNkNjBmNjA2MDc3NSIsIm5hbWUiOiJKb2huIERvZSIsInVzZXJuYW1lIjoiam9obmRvZTIiLCJpYXQiOjE3Mjk4OTAzNzYsImV4cCI6MTcyOTg5MTI3Nn0.VoCwsIgkSXrONt05zn_KAQW9hJKxPydid5k4CCEh_GQ
 
-### USERS
+
+# ---------------- AUTH ----------------
+###
+POST http://{{BASE_API_URL}}/login
+Content-Type: application/json
+
+{
+    "username": "{{USERNAME}}",
+    "password": "{{PASSWORD}}"
+}
+
+# ---------------- USERS ----------------
+###
 GET http://{{BASE_API_URL}}/users
+Authorization: Bearer {{TOKEN}}
+
+###
+GET http://{{BASE_API_URL}}/users/{{USER_ID}}
 Authorization: Bearer {{TOKEN}}
 
 ###
@@ -15,32 +34,26 @@ Content-Type: application/json
     "username": "johndoe{{$randomInt 1 100}}",
     "name": "John Doe",
     // "password": "password{{$randomInt 1 100}}"
-    "password": "passwordtest"
+    "password": "{{PASSWORD}}"
 }
 
-### AUTH
-POST http://{{BASE_API_URL}}/login
-Content-Type: application/json
-
-{
-    "username": "johndoe50",
-    "password": "passwordtest"
-}
-
-### BLOGS
+# ---------------- BLOGS ----------------
+###
 GET http://{{BASE_API_URL}}/blogs
+Authorization: Bearer {{TOKEN}}
 
 ###
 POST http://{{BASE_API_URL}}/blogs
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
     "title": "My {{$randomInt 1 100}}th blog",
     "author": "John Doe {{$randomInt 1 100}}",
     "url": "http://www.johndoe.com",
-    "likes": "{{$randomInt 1 100}}",
-    "user": "671ac1ee0b4ada3c76b13d64"
+    "likes": "{{$randomInt 1 100}}"
 }
 
 ###
 DELETE http://{{BASE_API_URL}}/blogs/{{BLOG_ID}}
+Authorization: Bearer {{TOKEN}}

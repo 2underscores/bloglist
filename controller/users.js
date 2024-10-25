@@ -16,6 +16,16 @@ userRouter.get('/', async (request, response) => {
 
 })
 
+userRouter.get('/:id', async (request, response) => {
+  auth.assertValidToken(request)
+  const user = await User.findById(request.params.id).populate('blogs')
+  if (!user) {
+    return response.status(404).end()
+  }
+  response.json(user)
+
+})
+
 userRouter.post('/', async (request, response) => {
   const body = request.body
 

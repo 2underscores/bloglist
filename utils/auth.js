@@ -2,10 +2,31 @@ const jwt = require('jsonwebtoken')
 const bycrypt = require('bcrypt')
 const config = require('./config')
 
-const authMiddleware = async (req, res, next) => {
+const tokenExtractor = async (req, res, next) => {
   // get token from header and add to request params
-  const token = await assertValidToken(req)
-  req.token = token
+  const excludedRoutes = [
+    { method: 'POST', path: '/api/login' },
+    { method: 'POST', path: '/api/users' },
+  ]
+  for (const route of excludedRoutes) {
+    if (req.method === route.method && req.path === route.path) {
+      return next()
+    }
+  }
+  req.token = await assertValidToken(req)
+  next()
+}
+
+const userExtractor = async (req, res, next) => {
+  if (!req.token) {
+    next()
+    return
+  }
+  req.user = {
+    id: req.token.id,
+    name: req.token.name,
+    username: req.token.username,
+  }
   next()
 }
 
@@ -21,10 +42,15 @@ const assertPasswordCorrect = async (password, hash) => {
 }
 
 const generateToken = (user) => {
-  return jwt.sign({
-    username: user.username,
-    id: user.id
-  }, config.AUTH_SECRET)
+  return jwt.sign(
+    {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+    },
+    config.AUTH_SECRET,
+    { expiresIn: 15 * 60 }
+  )
 }
 
 // Auth
@@ -42,6 +68,12 @@ const validateToken = (token) => {
   if (!token.id) {
     return false
   }
+  if (!token.username) {
+    return false
+  }
+  if (!token.exp) {
+    return false
+  }
   return true
 }
 
@@ -53,7 +85,7 @@ const assertValidToken = (req) => {
       return token
     }
   }
-  throw new AuthError('Token in auth header is invalid')
+  throw new AuthError('Invalid token')
 }
 
 class AuthError extends Error {
@@ -64,7 +96,8 @@ class AuthError extends Error {
 }
 
 module.exports = {
-  authMiddleware,
+  tokenExtractor,
+  userExtractor,
   isCorrectPassword,
   assertPasswordCorrect,
   generateToken,

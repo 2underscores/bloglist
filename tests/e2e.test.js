@@ -22,15 +22,23 @@ beforeEach(async () => {
 describe('Creating a user, attaching blog', () => {
   test('Attach blogs user, check user', async () => {
     // TODO: signup, login, create blog.
+    const userCreated = await api
+      .post('/api/users')
+      .send(helper.testUsers[1])
+      .expect(200)
     const beforeUsersResp = await api
       .get('/api/users/')
       .set('authorization', `Bearer ${token}`)
       .expect(200)
     const beforeUser = beforeUsersResp.body[0]
-    const blogCreateResp = await api.post('/api/blogs').send({
-      ...helper.testBlogs[0],
-      ...{ user: beforeUser.id }
-    }).expect(201)
+    const blogCreateResp = await api
+      .post('/api/blogs')
+      .set('authorization', `Bearer ${token}`)
+      .send({
+        ...helper.testBlogs[0],
+        ...{ user: beforeUser.id }
+      })
+      .expect(201)
     const blogId = blogCreateResp.body.id
     const afterUsersResp = await api
       .get('/api/users/')
@@ -44,9 +52,4 @@ describe('Creating a user, attaching blog', () => {
   })
 })
 
-after(async () => {
-  await mongoose.connection.close()
-  // If connection left open, process never end.
-  // Can see in debugger the top "blog_api.test.js" process never ends so the test execution is never done.
-  // stack is: test:watch: npm -> cross-env -> blog_api.test.js
-})
+after(async () => { await mongoose.connection.close() })

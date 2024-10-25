@@ -22,7 +22,7 @@ blogRouter.get('/:id', async (request, response) => {
 
 blogRouter.post('/', async (request, response) => {
   const body = request.body
-  const user = await User.findById(body.user) // Err if user not exist
+  const user = await User.findById(request.user.id) // Err if user not exist
   const newBlog = {
     title: body.title,
     author: body.author,
@@ -46,9 +46,18 @@ blogRouter.put('/:id/likes', async (request, response) => {
 })
 
 blogRouter.delete('/:id', async (request, response) => {
-  const res = await Blog.findByIdAndDelete(request.params.id)
-  const code = res ? 204 : 404
-  response.status(code).end()
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    response.status(404).end()
+    return
+  }
+  if (request.user.id !== blog.user.toString()) {
+    response.status(401).json({ error: 'unauthorized' })
+  } else {
+    const res = await Blog.findByIdAndDelete(blog.id)
+    const code = res ? 204 : 404
+    response.status(code).end()
+  }
 })
 
 // TODO: Blog.deleteMany({})
