@@ -4,12 +4,17 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    // unique: true,
+    unique: true,
     minlength: 3
+  },
+  name: {
+    type: String,
+    required: true,
+    minlength: 3,
   },
   passwordHash: {
     type: String,
-    required: true
+    required: true,
   },
   blogs: [{ // special mongoose syntax for list of other objects
     type: mongoose.Schema.Types.ObjectId,
@@ -19,6 +24,9 @@ const userSchema = new mongoose.Schema({
   toJSON: {
     transform: (doc, ret) => {
       ret.id = ret._id
+      delete ret._id
+      delete ret.__v
+      delete ret.passwordHash
     }
   }
 })

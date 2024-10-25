@@ -31,12 +31,15 @@ const testBlogs = [
 const testUsers = [
   {
     username: 'TestUser1',
+    name: 'Jez Smith',
     password: 'password1',
   }, {
     username: 'TestUser2',
+    name: "Lizzy Atkinson",
     password: 'password2',
   }, {
     username: 'TestUser3',
+    name: 'Milly Winks',
     password: 'password3',
   }
 ]
@@ -52,10 +55,12 @@ const generateMockMongoId = () => {
 }
 
 const generateMockUser = async (partialUserObject) => {
+  const unique = crypto.randomBytes(4).toString('hex')
   const template = {
     _id: generateMockMongoId(),
     passwordHash: (await generatePasswordHash()).hash,
-    username: crypto.randomBytes(4).toString('hex'),
+    username: `TestUser${unique}`,
+    name: `Borris ${unique}`,
   }
   return { ...template, ...partialUserObject }
 }
@@ -64,6 +69,7 @@ const generateMockUser = async (partialUserObject) => {
 const injectUser = async (testUser) => {
   const userSaved = await User({
     username: testUser.username,
+    name: testUser.name,
     passwordHash: (await generatePasswordHash()).hash,
   }).save()
   return userSaved

@@ -23,7 +23,7 @@ POST http://{{BASE_API_URL}}/login
 Content-Type: application/json
 
 {
-    "username": "johndoe22",
+    "username": "johndoe50",
     "password": "passwordtest"
 }
 

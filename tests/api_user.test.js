@@ -4,24 +4,26 @@ const supertest = require('supertest')
 const app = require('../app')
 const mongoose = require('mongoose') // App initializes mongo, but doesn't close it. Test close it.
 const helper = require('./test_helper')
+const auth = require('../utils/auth')
 
 const api = supertest(app)
 //: Switch to a testing DB!
-let users
+let users, tokens
 
 beforeEach(async () => {
   await helper.clearData()
   users = await helper.injectUsers(helper.testUsers)
+  tokens = users.map(u => auth.generateToken(u))
 })
 
 describe('User Management', () => {
   test('Can list all users', async () => {
-    const usersResp = await api.get('/api/users')
+    const usersResp = await api.get('/api/users').set('authorization', `Bearer ${tokens[0]}`)
     assert.strictEqual(usersResp.body.length, users.length)
   })
   test('List contains specific user', async () => {
     const user = users[0]
-    const usersResp = await api.get('/api/users')
+    const usersResp = await api.get('/api/users').set('authorization', `Bearer ${tokens[0]}`)
     assert(usersResp.body.map(u => u.username).includes(user.username))
   })
   test('Can create unique user', async () => {
