@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useState } from "react";
 import auth from '../services/auth';
 
-function Login({ user, setUser }) {
+function Login({ user, setUser, pushNotif }) {
   const [username, setUsername] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -10,14 +10,13 @@ function Login({ user, setUser }) {
   const handleLogin = async (evt) => {
     evt.preventDefault()
     console.log('Logging in: ', username)
-    const loginResult = await auth.login(username, password)
-    console.log('Logged in: ', loginResult)
-    const token = loginResult.data.token
-    if (token) {
-      const decoded = jwtDecode(token); // Unverified for client
+    try {
+      const loginResult = await auth.login(username, password)
+      const tokenStr = loginResult.data.token
+      const decoded = jwtDecode(tokenStr); // Unverified for client
       console.log('Decoded token: ', decoded)
       setUser({
-        'token': token,
+        'token': tokenStr,
         'id': decoded.id,
         'name': decoded.name,
         'username': decoded.username,
@@ -25,6 +24,10 @@ function Login({ user, setUser }) {
       setName('')
       setUsername('')
       setPassword('')
+      pushNotif({ type: 'success', message: `Logged in ${decoded.name}` })
+    } catch (e) {
+      console.error(e)
+      pushNotif({ type: 'error', message: e.message })
     }
   }
 
@@ -36,11 +39,17 @@ function Login({ user, setUser }) {
   }
 
   const handleSignup = async (evt) => {
-    evt.preventDefault()
-    console.log('Creating User: ', username, name);
-    const user = await auth.createUser(username, name, password)
-    console.log('New user: ', user);
-    const loginResult = await handleLogin(evt)
+    try {
+      evt.preventDefault()
+      console.log('Creating User: ', username, name);
+      const user = await auth.createUser(username, name, password)
+      pushNotif({ type: 'success', message: `Created ${user.data.name}` })
+      console.log('New user: ', user);
+      const loginResult = await handleLogin(evt)
+    } catch (e) {
+      console.error(e)
+      pushNotif({ type: 'error', message: e.message })
+    }
   }
 
   return (
@@ -49,7 +58,7 @@ function Login({ user, setUser }) {
         <span>User: {user.name} <button onClick={handleLogout}>Logout</button></span>
       </div>
       :
-      <div>
+      <div style={{ 'display': 'flex', 'gap': '50px' }}>
         <form onSubmit={handleLogin} style={{ 'display': 'grid' }}>
           <h2>Login</h2>
           <span>Username: <input type='text' name='UsernameLogin' value={username} onChange={(evt) => setUsername(evt.target.value)}></input></span>
