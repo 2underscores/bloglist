@@ -15,12 +15,14 @@ function Login({ user, setUser, pushNotif }) {
       const tokenStr = loginResult.data.token
       const decoded = jwtDecode(tokenStr); // Unverified for client
       console.log('Decoded token: ', decoded)
-      setUser({
+      const user = {
         'token': tokenStr,
         'id': decoded.id,
         'name': decoded.name,
         'username': decoded.username,
-      })
+      }
+      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+      setUser(user)
       setName('')
       setUsername('')
       setPassword('')
@@ -34,6 +36,7 @@ function Login({ user, setUser, pushNotif }) {
   const handleLogout = async (evt) => {
     evt.preventDefault()
     setUser(null)
+    window.localStorage.removeItem('loggedInUser')
     console.log('User logged out');
 
   }

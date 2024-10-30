@@ -8,7 +8,9 @@ const blogRouter = express.Router()
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1 })
   logger.info(`Retrieved ${blogs.length} blogs`)
-  response.json(blogs)
+  // Filter blogs to be for that user
+  const ownBlogs = blogs.filter(b => b.user.id === request.user.id)
+  response.json(ownBlogs)
 })
 
 blogRouter.get('/:id', async (request, response) => {
