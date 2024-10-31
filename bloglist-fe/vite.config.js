@@ -10,6 +10,10 @@ export default defineConfig({
         target: 'http://localhost:3003',
         changeOrigin: true,
       },
-    }
+    },
+    sourcemap: true // Ensures source maps are available in dev mode
   },
+  build: {
+    sourcemap: true // Ensures source maps are available for debugging
+  }
 })

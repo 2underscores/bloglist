@@ -2,23 +2,47 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch via NPM",
+      "name": "BE Server (Dev)",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
-        "run-script",
-        "debug",
-        "--inspect"
+        "run",
+        "dev"
       ],
-      // "port": 5858
+      "console": "internalConsole", // "integratedTerminal" | "internalConsole" | "externalTerminal",
+      "internalConsoleOptions": "openOnSessionStart" // "neverOpen" | "openOnSessionStart" | "openOnFirstSessionStart"
     },
     {
-      "command": "npm run test:watch",
-      "name": "Test Watch",
+      "name": "BE Tests",
+      "type": "node",
       "request": "launch",
-      "type": "node-terminal"
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test:watch"
+      ],
+      // Test runners expect to be run from terminal and be a bit more interactive
+      "console": "integratedTerminal", // "integratedTerminal" | "internalConsole" | "externalTerminal",
+      "internalConsoleOptions": "neverOpen" // "neverOpen" | "openOnSessionStart" | "openOnFirstSessionStart"
+    },
+    {
+      "name": "Web Server (Dev)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/bloglist-fe",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "console": "integratedTerminal", // "integratedTerminal" | "internalConsole" | "externalTerminal",
+      "internalConsoleOptions": "neverOpen", // "neverOpen" | "openOnSessionStart" | "openOnFirstSessionStart"
+      "env": {
+        "NODE_OPTIONS": "--inspect" // Enables the Node debugger
+      }
     },
   ]
 }
