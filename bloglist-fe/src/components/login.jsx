@@ -29,7 +29,7 @@ function Login({ user, setUser, pushNotif }) {
       pushNotif({ type: 'success', message: `Logged in ${decoded.name}` })
     } catch (e) {
       console.error(e)
-      pushNotif({ type: 'error', message: e.message })
+      pushNotif({ type: 'error', message: e.response.data.error })
     }
   }
 
@@ -37,8 +37,7 @@ function Login({ user, setUser, pushNotif }) {
     evt.preventDefault()
     setUser(null)
     window.localStorage.removeItem('loggedInUser')
-    console.log('User logged out');
-
+    pushNotif({ type: 'success', message: `Logged out ${user.name}` })
   }
 
   const handleSignup = async (evt) => {
@@ -51,7 +50,7 @@ function Login({ user, setUser, pushNotif }) {
       const loginResult = await handleLogin(evt)
     } catch (e) {
       console.error(e)
-      pushNotif({ type: 'error', message: e.message })
+      pushNotif({ type: 'error', message: e.response.data.error })
     }
   }
 

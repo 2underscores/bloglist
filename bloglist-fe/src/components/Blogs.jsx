@@ -2,11 +2,12 @@
 function Blog(blog) {
   const blogStr = `${blog.title} - ${blog.author} - ${blog.url}`
   return (
-    <div key={blogStr}>{blogStr}</div>
+    <div key={blog.id}>{blogStr}</div>
   )
 }
 
-function Blogs({ blogs }) {
+function Blogs({ blogs, pushNotif }) {
+
   return (
     <>
       <h1>Blogs</h1>
