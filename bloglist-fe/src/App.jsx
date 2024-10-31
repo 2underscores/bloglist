@@ -1,11 +1,11 @@
 import CryptoJS from 'crypto-js';
+import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from "react";
 import Blogs from './components/Blogs';
 import Login from './components/Login';
 import NewBlog from './components/NewBlog';
 import Notifications from "./components/Notifications";
 import blogService from './services/blogs';
-
 
 function App() {
   const [user, setUser] = useState(undefined) // undefined | null | object = user
@@ -17,18 +17,33 @@ function App() {
     const loggedUserJSON = window.localStorage.getItem('loggedInUser') || null
     console.log("User from local storage: ", loggedUserJSON);
     if (loggedUserJSON) {
-      setUser(JSON.parse(loggedUserJSON))
+      const loggedUser = JSON.parse(loggedUserJSON)
+      loggedUser.decodedToken = jwtDecode(loggedUser.token);
+      const tokenExpired = (loggedUser.decodedToken.exp < Date.now() / 1000)
+      if (tokenExpired) {
+        console.log("Token expired, logging out.")
+        setUser(null)
+        pushNotif({ type: 'error', message: 'Session expired, please log in again.' })
+      } else {
+        setUser(JSON.parse(loggedUserJSON))
+      }
+    } else {
+      console.log("No user in local storage.")
+      setUser(null)
     }
   }, [])
 
   // On user change:
   useEffect(() => {
     // update external stores of user/auth
-    if (user !== undefined) {
+    if (user === undefined) {
+      console.log("User is undefined, this is initial load. Don't wipe local storage.");
+    } else if (user === null) {
+      console.log("User has been removed, wipe local storage.")
+      window.localStorage.removeItem('loggedInUser') // This is duplicated in logout function
+    } else {
       console.log("Setting local storage user to: ", user)
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
-    } else {
-      console.log("User is undefined, this is initial load. Don't write to local storage.");
     }
     // Update blogs
     if (user) {
@@ -55,18 +70,6 @@ function App() {
       setNotifications((preNotifs) => preNotifs.filter(n => n.id !== id))
     }, 3000)
   }
-
-  // Debugging
-  useEffect(() => {
-    const initialNotifs = [ // id and time added
-      { type: 'error', message: 'Test error1' },
-      { type: 'error', message: 'Test error2' },
-      { type: 'success', message: 'Test success1' },
-      { message: 'unknown type notif' },
-    ]
-    setNotifications([])
-    initialNotifs.forEach((n) => pushNotif(n))
-  }, [])
 
   return (
     <>
