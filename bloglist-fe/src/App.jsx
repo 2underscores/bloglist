@@ -2,8 +2,10 @@ import CryptoJS from 'crypto-js';
 import { useEffect, useState } from "react";
 import Blogs from './components/Blogs';
 import Login from './components/Login';
+import Logout from './components/Logout';
 import NewBlog from './components/NewBlog';
 import Notifications from "./components/Notifications";
+import Togglable from './components/Togglable';
 import useAuth from './hooks/auth';
 import blogService from './services/blogs';
 
@@ -43,7 +45,11 @@ function App() {
 
   return (
     <>
-      <Login auth={auth} setAuth={setAuth} pushNotif={pushNotif} />
+      {auth && <Logout auth={auth} setAuth={setAuth} pushNotif={pushNotif} />}
+      {!auth && <Togglable buttonName="Sign up / Login">
+        <Login auth={auth} setAuth={setAuth} pushNotif={pushNotif} />
+      </Togglable>}
+
       {auth && <NewBlog auth={auth} setBlogs={setBlogs} pushNotif={pushNotif} />}
       {auth && <Blogs auth={auth} blogs={blogs} pushNotif={pushNotif} />}
       <Notifications notifications={notifications} setNotifications={setNotifications} />

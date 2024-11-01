@@ -51,26 +51,21 @@ function Login({ auth, setAuth, pushNotif }) {
   }
 
   return (
-    auth ?
-      <div>
-        <span>User: {auth.token.name} <button onClick={handleLogout}>Logout</button></span>
-      </div>
-      :
-      <div style={{ 'display': 'flex', 'gap': '50px' }}>
-        <form onSubmit={handleLogin} style={{ 'display': 'grid' }}>
-          <h2>Login</h2>
-          <span>Username: <input type='text' name='UsernameLogin' value={username} onChange={(evt) => setUsername(evt.target.value)}></input></span>
-          <span>Password: <input type='text' name='PasswordLogin' value={password} onChange={(evt) => setPassword(evt.target.value)}></input></span>
-          <span><button type="submit">Login</button></span>
-        </form>
-        <form onSubmit={handleSignup} style={{ 'display': 'grid' }}>
-          <h2>Signup</h2>
-          <span>Name: <input type='text' name='NameSignup' value={name} onChange={(evt) => setName(evt.target.value)}></input></span>
-          <span> Username: <input type='text' name='UsernameSignup' value={username} onChange={(evt) => setUsername(evt.target.value)}></input></span>
-          <span>Password: <input type='text' name='PasswordSignup' value={password} onChange={(evt) => setPassword(evt.target.value)}></input></span>
-          <span><button type="submit">Signup</button></span>
-        </form>
-      </div>
+    <div style={{ 'display': 'flex', 'gap': '50px' }}>
+      <form onSubmit={handleLogin} style={{ 'display': 'grid' }}>
+        <h2>Login</h2>
+        <span>Username: <input type='text' name='UsernameLogin' value={username} onChange={(evt) => setUsername(evt.target.value)}></input></span>
+        <span>Password: <input type='text' name='PasswordLogin' value={password} onChange={(evt) => setPassword(evt.target.value)}></input></span>
+        <span><button type="submit">Login</button></span>
+      </form>
+      <form onSubmit={handleSignup} style={{ 'display': 'grid' }}>
+        <h2>Signup</h2>
+        <span>Name: <input type='text' name='NameSignup' value={name} onChange={(evt) => setName(evt.target.value)}></input></span>
+        <span> Username: <input type='text' name='UsernameSignup' value={username} onChange={(evt) => setUsername(evt.target.value)}></input></span>
+        <span>Password: <input type='text' name='PasswordSignup' value={password} onChange={(evt) => setPassword(evt.target.value)}></input></span>
+        <span><button type="submit">Signup</button></span>
+      </form>
+    </div>
   )
 }
 
