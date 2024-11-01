@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blogService from '../services/blogs';
 
-function NewBlog({ user, setBlogs, pushNotif }) {
+function NewBlog({ auth, setBlogs, pushNotif }) {
 
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
@@ -15,7 +15,7 @@ function NewBlog({ user, setBlogs, pushNotif }) {
       url: newUrl,
     }
     try {
-      const createdBlog = await blogService.create(user.token, newBlog)
+      const createdBlog = await blogService.create(auth.tokenEncoded, newBlog)
       console.log('Created blog: ', createdBlog);
       setBlogs((prev) => [...prev, createdBlog])
       setNewTitle('')

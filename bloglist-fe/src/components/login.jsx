@@ -1,32 +1,29 @@
 import { jwtDecode } from 'jwt-decode';
 import { useState } from "react";
-import auth from '../services/auth';
+import authService from '../services/auth';
 
-function Login({ user, setUser, pushNotif }) {
+function Login({ auth, setAuth, pushNotif }) {
   const [username, setUsername] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = async (evt) => {
     evt.preventDefault()
-    console.log('Logging in: ', username)
+    console.log(`Attempting login of "${username}"`)
     try {
-      const loginResult = await auth.login(username, password)
+      const loginResult = await authService.login(username, password)
       const tokenStr = loginResult.data.token
-      const decoded = jwtDecode(tokenStr); // Unverified for client
-      console.log('Decoded token: ', decoded)
-      const user = {
-        'token': tokenStr,
-        'id': decoded.id,
-        'name': decoded.name,
-        'username': decoded.username,
+      const decodedToken = jwtDecode(tokenStr)
+      const newAuth = {
+        'tokenEncoded': tokenStr,
+        'token': decodedToken,
       }
-      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
-      setUser(user)
+      console.log('New Auth: ', newAuth)
+      setAuth(newAuth)
       setName('')
       setUsername('')
       setPassword('')
-      pushNotif({ type: 'success', message: `Logged in ${decoded.name}` })
+      pushNotif({ type: 'success', message: `Logged in ${newAuth.token.name}` })
     } catch (e) {
       console.error(e)
       pushNotif({ type: 'error', message: e.response.data.error })
@@ -35,19 +32,18 @@ function Login({ user, setUser, pushNotif }) {
 
   const handleLogout = async (evt) => {
     evt.preventDefault()
-    setUser(null)
-    window.localStorage.removeItem('loggedInUser')
-    pushNotif({ type: 'success', message: `Logged out ${user.name}` })
+    setAuth(null)
+    pushNotif({ type: 'success', message: `Logged out ${auth.token.name}` })
   }
 
   const handleSignup = async (evt) => {
     try {
       evt.preventDefault()
       console.log('Creating User: ', username, name);
-      const user = await auth.createUser(username, name, password)
-      pushNotif({ type: 'success', message: `Created ${user.data.name}` })
+      const user = await authService.createUser(username, name, password)
       console.log('New user: ', user);
-      const loginResult = await handleLogin(evt)
+      pushNotif({ type: 'success', message: `Created ${user.data.name}` })
+      await handleLogin(evt)
     } catch (e) {
       console.error(e)
       pushNotif({ type: 'error', message: e.response.data.error })
@@ -55,9 +51,9 @@ function Login({ user, setUser, pushNotif }) {
   }
 
   return (
-    user ?
+    auth ?
       <div>
-        <span>User: {user.name} <button onClick={handleLogout}>Logout</button></span>
+        <span>User: {auth.token.name} <button onClick={handleLogout}>Logout</button></span>
       </div>
       :
       <div style={{ 'display': 'flex', 'gap': '50px' }}>

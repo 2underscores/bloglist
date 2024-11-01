@@ -9,8 +9,6 @@ function Notification(notif) {
 }
 
 function Notifications({ notifications, setNotifications }) {
-  console.log(notifications);
-
   return (
     <div className="notificationContainer">
       <h1>TEST: Notifs</h1>
