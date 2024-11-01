@@ -50,7 +50,9 @@ function App() {
         <Login auth={auth} setAuth={setAuth} pushNotif={pushNotif} />
       </Togglable>}
 
-      {auth && <NewBlog auth={auth} setBlogs={setBlogs} pushNotif={pushNotif} />}
+      {auth && <Togglable buttonName="New Blog">
+        <NewBlog auth={auth} setBlogs={setBlogs} pushNotif={pushNotif} />
+      </Togglable>}
       {auth && <Blogs auth={auth} blogs={blogs} pushNotif={pushNotif} />}
       <Notifications notifications={notifications} setNotifications={setNotifications} />
     </>

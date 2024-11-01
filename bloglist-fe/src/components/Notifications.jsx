@@ -11,7 +11,6 @@ function Notification(notif) {
 function Notifications({ notifications, setNotifications }) {
   return (
     <div className="notificationContainer">
-      <h1>TEST: Notifs</h1>
       {notifications.map(n => Notification(n))}
     </div>
   )

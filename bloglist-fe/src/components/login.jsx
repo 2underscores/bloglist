@@ -30,12 +30,6 @@ function Login({ auth, setAuth, pushNotif }) {
     }
   }
 
-  const handleLogout = async (evt) => {
-    evt.preventDefault()
-    setAuth(null)
-    pushNotif({ type: 'success', message: `Logged out ${auth.token.name}` })
-  }
-
   const handleSignup = async (evt) => {
     try {
       evt.preventDefault()
