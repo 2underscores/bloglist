@@ -25,11 +25,11 @@
         "test:watch"
       ],
       // Test runners expect to be run from terminal and be a bit more interactive
-      "console": "integratedTerminal", // "integratedTerminal" | "internalConsole" | "externalTerminal",
-      "internalConsoleOptions": "neverOpen" // "neverOpen" | "openOnSessionStart" | "openOnFirstSessionStart"
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     },
     {
-      "name": "Web Server (Dev)",
+      "name": "Vite Server",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/bloglist-fe",
@@ -38,11 +38,28 @@
         "run",
         "dev"
       ],
-      "console": "integratedTerminal", // "integratedTerminal" | "internalConsole" | "externalTerminal",
-      "internalConsoleOptions": "neverOpen", // "neverOpen" | "openOnSessionStart" | "openOnFirstSessionStart"
-      "env": {
-        "NODE_OPTIONS": "--inspect" // Enables the Node debugger
-      }
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      // CANNOT GET THIS WORKING WITH BREAKPOINTS AT LAUNCH
+      // Hide all breakpoints, launch app, then set breakpoints
+      "name": "Web App Debug",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/bloglist-fe/src", // sourcemap resolution
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "smartStep": true,
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ]
+      // "preLaunchTask": "start-vite",
     },
   ]
 }

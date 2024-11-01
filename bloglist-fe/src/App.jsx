@@ -16,6 +16,7 @@ function App() {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedInUser') || null
     console.log("User from local storage: ", loggedUserJSON);
+    // debugger;
     if (loggedUserJSON) {
       const loggedUser = JSON.parse(loggedUserJSON)
       loggedUser.decodedToken = jwtDecode(loggedUser.token);
