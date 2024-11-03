@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useState } from "react";
 import authService from '../services/auth';
 
-function Login({ auth, setAuth, pushNotif }) {
+function Login({ setAuth, pushNotif }) {
   const [username, setUsername] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')

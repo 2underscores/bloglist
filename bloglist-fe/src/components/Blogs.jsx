@@ -17,7 +17,7 @@ function Blog({ auth, blog, setBlogs, pushNotif }) {
   }
 
   const handleLike = async () => {
-    const res = await blogService.like(auth.tokenEncoded, blog.id)
+    await blogService.like(auth.tokenEncoded, blog.id)
     setBlogs((prevBlogs) => {
       return prevBlogs.map(b => b.id !== blog.id ? b : { ...b, ...{ likes: b.likes + 1 } })
     }

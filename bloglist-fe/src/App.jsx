@@ -14,7 +14,7 @@ function App() {
   const [blogs, setBlogs_] = useState([])
   const [notifications, setNotifications] = useState([])
 
-  // Centralised set
+  // Centralised sort. Somewhat ugly, should probably be customHook
   const setBlogs = (newBlogs) => {
     if (typeof newBlogs === 'function') {
       setBlogs_((prevBlogs) => {

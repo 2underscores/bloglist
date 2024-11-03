@@ -8,7 +8,7 @@ function Notification(notif) {
     </div>)
 }
 
-function Notifications({ notifications, setNotifications }) {
+function Notifications({ notifications }) {
   return (
     <div className="notificationContainer">
       {notifications.map(n => Notification(n))}
