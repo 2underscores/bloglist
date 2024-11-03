@@ -6,12 +6,22 @@ function Blog({ auth, blog, setBlogs, pushNotif }) {
   const [expanded, setExpanded] = useState(false)
 
   const handleDelete = async () => {
-    console.log('TODO: Delete note');
+    if (!window.confirm(`Delete blog "${blog.title}"?`)) {
+      return
+    }
     await blogService.delete(auth.tokenEncoded, blog.id)
     pushNotif({ type: 'success', message: `Deleted blog "${blog.title}"` })
     setBlogs((prevBlogs) => {
       return prevBlogs.filter(b => b.id !== blog.id)
     })
+  }
+
+  const handleLike = async () => {
+    const res = await blogService.like(auth.tokenEncoded, blog.id)
+    setBlogs((prevBlogs) => {
+      return prevBlogs.map(b => b.id !== blog.id ? b : { ...b, ...{ likes: b.likes + 1 } })
+    }
+    )
   }
 
   const BlogButtons = () => {
@@ -30,7 +40,7 @@ function Blog({ auth, blog, setBlogs, pushNotif }) {
           <div className='blogTitle'>Title: {blog.title}</div>
           <div className='blogAuthor'>Author: {blog.author}</div>
           <div className='blogUrl'>URL: {blog.url}</div>
-          <div className='blogLikes'>Likes: {blog.likes}</div>
+          <div className='blogLikes'>Likes: {blog.likes} <button onClick={handleLike}>like</button></div>
           <BlogButtons />
         </div >
         :

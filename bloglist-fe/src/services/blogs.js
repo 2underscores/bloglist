@@ -1,11 +1,15 @@
 import axios from 'axios';
 const baseUrl = '/api'
 
-const getConfig = (token) => ({
-  headers: {
-    Authorization: `Bearer ${token}`
+const getConfig = (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   }
-})
+  console.log('Auth Config: ', config);
+  return config
+}
 
 const list = async (token) => {
   const resp = await axios.get(`${baseUrl}/blogs`, getConfig(token))
@@ -25,4 +29,10 @@ const delete_ = async (token, blogId) => {
   return resp.data
 }
 
-export default { list, create, delete: delete_ }
+const like = async (token, blogId) => {
+  const resp = await axios.put(`${baseUrl}/blogs/${blogId}/likes`, {}, getConfig(token))
+  console.log(resp);
+  return resp
+}
+
+export default { list, create, delete: delete_, like }
