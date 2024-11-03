@@ -57,7 +57,7 @@ function App() {
           <Togglable buttonName="New Blog" ref={newNoteToggleRef}>
             <NewBlog auth={auth} setBlogs={setBlogs} parentToggle={newNoteToggleRef} pushNotif={pushNotif} />
           </Togglable>
-          <Blogs auth={auth} blogs={blogs} pushNotif={pushNotif} />
+          <Blogs auth={auth} blogs={blogs} setBlogs={setBlogs} pushNotif={pushNotif} />
         </>
       }
       <Notifications notifications={notifications} setNotifications={setNotifications} />

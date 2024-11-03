@@ -19,4 +19,10 @@ const create = async (token, blog) => {
   return resp.data
 }
 
-export default { list, create }
+const delete_ = async (token, blogId) => {
+  const resp = await axios.delete(`${baseUrl}/blogs/${blogId}`, getConfig(token))
+  console.log(resp);
+  return resp.data
+}
+
+export default { list, create, delete: delete_ }

@@ -48,6 +48,7 @@ blogRouter.put('/:id/likes', async (request, response) => {
 })
 
 blogRouter.delete('/:id', async (request, response) => {
+  const user = await User.findById(request.user.id)
   const blog = await Blog.findById(request.params.id)
   if (!blog) {
     response.status(404).end()
@@ -56,8 +57,12 @@ blogRouter.delete('/:id', async (request, response) => {
   if (request.user.id !== blog.user.toString()) {
     response.status(401).json({ error: 'unauthorized' })
   } else {
+    // Delete blog from list
     const res = await Blog.findByIdAndDelete(blog.id)
     const code = res ? 204 : 404
+    // Remove blog from user
+    user.blogs = user.blogs.filter(b => b._id.toString() !== blog._id.toString())
+    await user.save()
     response.status(code).end()
   }
 })
