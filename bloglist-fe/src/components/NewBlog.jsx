@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blogService from '../services/blogs';
 
-function NewBlog({ auth, setBlogs, pushNotif }) {
+function NewBlog({ auth, setBlogs, pushNotif, parentToggle }) {
 
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
@@ -18,6 +18,7 @@ function NewBlog({ auth, setBlogs, pushNotif }) {
       const createdBlog = await blogService.create(auth.tokenEncoded, newBlog)
       console.log('Created blog: ', createdBlog);
       setBlogs((prev) => [...prev, createdBlog])
+      parentToggle.current.toggleSelf()
       setNewTitle('')
       setNewAuthor('')
       setNewUrl('')

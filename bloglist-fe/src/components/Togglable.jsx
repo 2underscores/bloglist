@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 
-function Togglable(props) {
+const Togglable = forwardRef(function Togglable(props, ref) {
   const [expand, setExpand] = useState(false);
 
+  useImperativeHandle(ref, () =>
+  ({
+    toggleSelf: () => {
+      console.log(`Toggling "expand" from ${expand} to ${!expand}`)
+      setExpand(!expand)
+      return !expand
+    },
+  })
+    , [expand])
 
   return (
     <div>
@@ -15,6 +24,6 @@ function Togglable(props) {
       </div>}
     </div>
   )
-}
+})
 
 export default Togglable

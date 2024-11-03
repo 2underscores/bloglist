@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Blogs from './components/Blogs';
 import Login from './components/Login';
 import Logout from './components/Logout';
@@ -37,23 +37,29 @@ function App() {
         ...notif,
         ...{ time, id }
       }])
-    // Delete notification after 5s
     setTimeout(() => {
       setNotifications((preNotifs) => preNotifs.filter(n => n.id !== id))
     }, 3000)
   }
 
+  // Allow create note to collapse it's own paren't toggle
+  const newNoteToggleRef = useRef(null)
+
   return (
     <>
-      {auth && <Logout auth={auth} setAuth={setAuth} pushNotif={pushNotif} />}
-      {!auth && <Togglable buttonName="Sign up / Login">
-        <Login auth={auth} setAuth={setAuth} pushNotif={pushNotif} />
-      </Togglable>}
-
-      {auth && <Togglable buttonName="New Blog">
-        <NewBlog auth={auth} setBlogs={setBlogs} pushNotif={pushNotif} />
-      </Togglable>}
-      {auth && <Blogs auth={auth} blogs={blogs} pushNotif={pushNotif} />}
+      {!auth ?
+        <Togglable buttonName="Sign up / Login">
+          <Login auth={auth} setAuth={setAuth} pushNotif={pushNotif} />
+        </Togglable>
+        :
+        <>
+          <Logout auth={auth} setAuth={setAuth} pushNotif={pushNotif} />
+          <Togglable buttonName="New Blog" ref={newNoteToggleRef}>
+            <NewBlog auth={auth} setBlogs={setBlogs} parentToggle={newNoteToggleRef} pushNotif={pushNotif} />
+          </Togglable>
+          <Blogs auth={auth} blogs={blogs} pushNotif={pushNotif} />
+        </>
+      }
       <Notifications notifications={notifications} setNotifications={setNotifications} />
     </>
   )
