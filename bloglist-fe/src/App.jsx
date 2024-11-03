@@ -11,8 +11,20 @@ import blogService from './services/blogs';
 
 function App() {
   const [auth, setAuth] = useAuth();
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs_] = useState([])
   const [notifications, setNotifications] = useState([])
+
+  // Centralised set
+  const setBlogs = (newBlogs) => {
+    if (typeof newBlogs === 'function') {
+      setBlogs_((prevBlogs) => {
+        const updatedBlogs = newBlogs(prevBlogs);
+        return [...updatedBlogs].sort((a, b) => b.likes - a.likes);
+      });
+    } else {
+      setBlogs_([...newBlogs].sort((a, b) => b.likes - a.likes));
+    }
+  };
 
   // Initialise state whenever user changes
   useEffect(() => {
