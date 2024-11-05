@@ -4,7 +4,12 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './testSetup.js'
+  },
+  server: { // The Vite dev server that hotloads, etc.
     proxy: {
       '/api': {
         target: 'http://localhost:3003',
