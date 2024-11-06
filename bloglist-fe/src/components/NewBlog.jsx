@@ -32,9 +32,9 @@ function NewBlog({ auth, setBlogs, pushNotif, parentToggle }) {
     <>
       <h2>New Blog</h2>
       <form onSubmit={handleSubmit} style={{ 'display': 'flex', 'flexDirection': 'column', 'gap': '5px', }}>
-        <span>Title: <input type="text" value={newTitle} name='newTitle' onChange={(evt) => { setNewTitle(evt.target.value) }}></input></span>
-        <span>Author: <input type="text" value={newAuthor} name='newAuthor' onChange={(evt) => { setNewAuthor(evt.target.value) }}></input></span>
-        <span>URL: <input type="text" value={newUrl} name='newUrl' onChange={(evt) => { setNewUrl(evt.target.value) }}></input></span>
+        <label>Title: <input type="text" value={newTitle} name='newTitle' onChange={(evt) => { setNewTitle(evt.target.value) }}></input></label>
+        <label>Author: <input type="text" value={newAuthor} name='newAuthor' onChange={(evt) => { setNewAuthor(evt.target.value) }}></input></label>
+        <label>URL: <input type="text" value={newUrl} name='newUrl' onChange={(evt) => { setNewUrl(evt.target.value) }}></input></label>
         <button type='submit'>Create</button>
       </form>
     </>

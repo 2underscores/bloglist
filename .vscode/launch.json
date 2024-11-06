@@ -29,6 +29,19 @@
       "internalConsoleOptions": "neverOpen"
     },
     {
+      "name": "FE Unit Tests",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test:watch:fe"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
       "name": "Vite Server",
       "type": "node",
       "request": "launch",

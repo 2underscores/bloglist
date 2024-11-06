@@ -9,6 +9,7 @@
     "dev:test": "cross-env NODE_ENV=test nodemon index.js",
     "test": "cross-env NODE_ENV=test node --test",
     "test:watch": "NODE_ENV=test node --test --watch",
+    "test:watch:fe": "npm run test:watch --prefix ./bloglist-fe",
     "lint": "eslint ."
   },
   "repository": {
