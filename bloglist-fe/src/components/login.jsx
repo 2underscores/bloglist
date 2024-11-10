@@ -45,19 +45,27 @@ function Login({ setAuth, pushNotif }) {
   }
 
   return (
-    <div style={{ 'display': 'flex', 'gap': '50px' }}>
-      <form onSubmit={handleLogin} style={{ 'display': 'grid' }}>
+    <div style={{ display: 'flex', gap: '50px' }}>
+      <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column' }}>
         <h2>Login</h2>
-        <span>Username: <input type='text' name='UsernameLogin' value={username} onChange={(evt) => setUsername(evt.target.value)}></input></span>
-        <span>Password: <input type='text' name='PasswordLogin' value={password} onChange={(evt) => setPassword(evt.target.value)}></input></span>
-        <span><button type="submit">Login</button></span>
+        <label htmlFor='username-login'>Username:</label>
+        <input id='username-login' type='text' name='UsernameLogin' value={username} onChange={(evt) => setUsername(evt.target.value)} />
+        <label htmlFor='password-login'>Password:</label>
+        <input id='password-login' type='password' name='PasswordLogin' value={password} onChange={(evt) => setPassword(evt.target.value)} />
+        <br></br>
+        <button type="submit">Login</button>
       </form>
-      <form onSubmit={handleSignup} style={{ 'display': 'grid' }}>
+
+      <form onSubmit={handleSignup} style={{ display: 'grid' }}>
         <h2>Signup</h2>
-        <span>Name: <input type='text' name='NameSignup' value={name} onChange={(evt) => setName(evt.target.value)}></input></span>
-        <span> Username: <input type='text' name='UsernameSignup' value={username} onChange={(evt) => setUsername(evt.target.value)}></input></span>
-        <span>Password: <input type='text' name='PasswordSignup' value={password} onChange={(evt) => setPassword(evt.target.value)}></input></span>
-        <span><button type="submit">Signup</button></span>
+        <label htmlFor='name-signup'>Name:</label>
+        <input id='name-signup' type='text' name='NameSignup' value={name} onChange={(evt) => setName(evt.target.value)} />
+        <label htmlFor='username-signup'>Username:</label>
+        <input id='username-signup' type='text' name='UsernameSignup' value={username} onChange={(evt) => setUsername(evt.target.value)} />
+        <label htmlFor='password-signup'>Password:</label>
+        <input id='password-signup' type='password' name='PasswordSignup' value={password} onChange={(evt) => setPassword(evt.target.value)} />
+        <br></br>
+        <button type="submit">Signup</button>
       </form>
     </div>
   )

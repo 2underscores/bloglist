@@ -60,7 +60,7 @@ function App() {
   return (
     <>
       {!auth ?
-        <Togglable buttonName="Sign up / Login">
+        <Togglable buttonName="Login / Signup">
           <Login auth={auth} setAuth={setAuth} pushNotif={pushNotif} />
         </Togglable>
         :
