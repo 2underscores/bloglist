@@ -15,6 +15,7 @@ const { tokenExtractor, userExtractor } = require('./utils/auth')
 // TODO: Connect in-mem DB if NODE_ENV=test (current a separate table)
 const { MONGO } = config
 const mongoUrl = `mongodb+srv://${MONGO.USER}:${MONGO.PASSWORD}@${MONGO.CLUSTER}.ljiec.mongodb.net/${MONGO.TABLE}?retryWrites=true&w=majority&appName=${MONGO.CLUSTER}`
+logger.info('Salt: ', config.SALT_ROUNDS)
 logger.info('connecting to MongoDB at ', mongoUrl)
 mongoose.connect(mongoUrl)
   .then(() => { logger.info('connected to MongoDB)') })
