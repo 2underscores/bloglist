@@ -1,8 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
-const bcrypt = require('bcrypt')
 const logger = require('../utils/logger')
-const config = require('../utils/config')
 const auth = require('../utils/auth')
 
 const userRouter = express.Router()
@@ -32,7 +30,7 @@ userRouter.post('/', async (request, response) => {
   const user = new User({
     username: body.username,
     name: body.name,
-    passwordHash: await bcrypt.hash(body.password, config.SALT_ROUNDS)
+    passwordHash: await auth.hashPassword(body.password),
   })
 
   const savedUser = await user.save()

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const bycrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
 const config = require('./config')
 
 const tokenExtractor = async (req, res, next) => {
@@ -30,9 +30,14 @@ const userExtractor = async (req, res, next) => {
   next()
 }
 
-// Login
+// Login/Signup
+const hashPassword = async (password) => {
+  const passwordHash = await bcrypt.hash(password, config.SALT_ROUNDS)
+  return passwordHash
+}
+
 const isCorrectPassword = async (password, hash) => {
-  return await bycrypt.compare(password, hash)
+  return await bcrypt.compare(password, hash)
 }
 
 const assertPasswordCorrect = async (password, hash) => {
@@ -98,6 +103,7 @@ class AuthError extends Error {
 module.exports = {
   tokenExtractor,
   userExtractor,
+  hashPassword,
   isCorrectPassword,
   assertPasswordCorrect,
   generateToken,

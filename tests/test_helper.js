@@ -30,9 +30,9 @@ const testBlogs = [
 
 const testUsers = [
   {
-    username: 'TestUser1',
+    username: 'uuu',
     name: 'Jez Smith',
-    password: 'password1',
+    password: 'ppp',
   }, {
     username: 'TestUser2',
     name: "Lizzy Atkinson",
@@ -70,7 +70,7 @@ const injectUser = async (testUser) => {
   const userSaved = await User({
     username: testUser.username,
     name: testUser.name,
-    passwordHash: (await generatePasswordHash()).hash,
+    passwordHash: (await generatePasswordHash(testUser.password)).hash,
   }).save()
   return userSaved
 }

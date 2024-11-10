@@ -15,6 +15,19 @@
       "internalConsoleOptions": "openOnSessionStart" // "neverOpen" | "openOnSessionStart" | "openOnFirstSessionStart"
     },
     {
+      "name": "BE Server (Test)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev:test"
+      ],
+      "console": "internalConsole", // "integratedTerminal" | "internalConsole" | "externalTerminal",
+      "internalConsoleOptions": "openOnSessionStart" // "neverOpen" | "openOnSessionStart" | "openOnFirstSessionStart"
+    },
+    {
       "name": "BE Tests",
       "type": "node",
       "request": "launch",

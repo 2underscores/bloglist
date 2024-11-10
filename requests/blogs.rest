@@ -39,8 +39,8 @@ Content-Type: application/json
 {
     "username": "johndoe{{$randomInt 1 100}}",
     "name": "John Doe",
-    // "password": "password{{$randomInt 1 100}}"
-    "password": "{{PASSWORD}}"
+    "password": "password{{$randomInt 1 100}}"
+    // "password": "{{PASSWORD}}"
 }
 
 # ---------------- BLOGS ----------------
