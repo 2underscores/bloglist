@@ -1,6 +1,7 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test')
-require('dotenv').config({ path: 'test-e2e/.env' })
+const path = require('path')
+require('dotenv').config({ path: path.join(__dirname, '.env') })
 
 /**
  * Read environment variables from file.
