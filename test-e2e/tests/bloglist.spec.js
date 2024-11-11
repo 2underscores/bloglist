@@ -15,7 +15,7 @@ describe('Authentication', () => {
   })
 
   beforeEach(async ({ page }) => {
-    await page.goto(process.env.BASE_WEB_URL)
+    await page.goto('/')
   })
 
   test('Signup', async ({ page }) => {
@@ -60,7 +60,7 @@ describe('Blogs', () => {
       author: `John ${uniqueStr}`,
       url: `http://testblogurl${uniqueStr}.com`,
     }
-    await page.goto(process.env.BASE_WEB_URL)
+    await page.goto('/')
     await helper.loginUser(page, user)
   })
 

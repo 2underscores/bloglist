@@ -12,7 +12,7 @@ const injectUser = async (request, user) => {
     password: `password-e2e-${uniqueStr}`,
   }
   const userToCreate = { ...userTemplate, ...user }
-  const respUser = await request.post(`${baseApiUrl}/users`, {
+  const respUser = await request.post('/api/users', {
     data: userToCreate
   })
   console.log({ ...userTemplate, ...user })
