@@ -28,8 +28,13 @@ describe('Authentication', () => {
   })
 
   test('Login', async ({ page }) => {
-    helper.loginUser(page, injectedUser)
+    await helper.loginUser(page, injectedUser)
     await expect(await page.getByRole('heading', { name: 'Blogs' })).toBeVisible()
+  })
+
+  test('Failed Login', async ({ page }) => {
+    await helper.attemptLogin(page, { ...injectedUser, ...{ password: 'false-password' } })
+    await expect(page.getByText('error - Invalid credentials').first()).toBeVisible()
   })
 
   test('Logout', async ({ page }) => {
@@ -43,22 +48,53 @@ describe('Authentication', () => {
 })
 
 describe('Blogs', () => {
-  let user
+  let user, newBlogContents
   beforeAll(async ({ request }) => {
     user = await helper.injectUser(request)
   })
 
   beforeEach(async ({ page }) => {
+    const uniqueStr = crypto.randomBytes(2).toString('hex')
+    newBlogContents = {
+      title: `A blog about ${uniqueStr}`,
+      author: `John ${uniqueStr}`,
+      url: `http://testblogurl${uniqueStr}.com`,
+    }
     await page.goto(process.env.BASE_WEB_URL)
     await helper.loginUser(page, user)
   })
 
   test('Create Blog', async ({ page }) => {
-    const newBlogContents = {
-      title: 'Test blog title',
-      author: 'test blog author',
-      url: 'http://testblogurl.com',
-    }
     await helper.createBlog(page, newBlogContents)
+  })
+
+  test('Like blog', async ({ page }) => {
+    await helper.createBlog(page, newBlogContents)
+    await page.getByRole('button', { name: 'View' }).first().click()
+    const likesDiv = page.locator('.blogLikes')
+    const initialLikes = await likesDiv.textContent()
+    const initialCount = parseInt(initialLikes.match(/\d+/)[0])
+    await likesDiv.getByRole('button', { name: 'like' }).click()
+    // Can't just grab number and compare immediately
+    // Need to either use expect().toPass() to retry until pass, or use playwright locators directly in expect to handle that
+    await expect(likesDiv).toContainText(`Likes: ${initialCount + 1}`)
+  })
+
+  test('Delete blog', async ({ page }) => {
+    await helper.createBlog(page, newBlogContents)
+    const newBlog = page.getByText(`${newBlogContents.title} - ${newBlogContents.author}`)
+    await expect(newBlog).toBeVisible()
+    page.on('dialog', async dialog => {
+      await dialog.accept()
+    })
+    await newBlog.getByRole('button', { name: 'Delete' }).click()
+    await expect(newBlog).not.toBeVisible({ timeout: 500 })
+  })
+
+  test.fixme('Like-ordering always applied', async ({ page }) => {
+    // Make two blogs, like one and check it's first, like the other twice and confirm it's first
+    // Expand ("view" button) all blogs first so can see the like count
+    // Have locator for (expanded) "firstBlog", and locators for (expanded) BlogA, blogB, and confirm that first blog changes based on liking blogA/B
+    page
   })
 })
