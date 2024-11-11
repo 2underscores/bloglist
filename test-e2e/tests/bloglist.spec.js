@@ -4,10 +4,11 @@ const helper = require('./helper')
 
 describe('Authentication', () => {
   let injectedUser
+  const uniqueStr = crypto.randomBytes(2).toString('hex')
   let newUser = {
-    name: 'nnn',
-    username: `User-${crypto.randomBytes(2).toString('hex')}`,
-    password: 'ppp',
+    name: 'name-e2e-signup-test',
+    username: `username-e2e-signup-test-${uniqueStr}`,
+    password: `ppp-${uniqueStr}`,
   }
   beforeAll(async ({ request }) => {
     injectedUser = await helper.injectUser(request)
@@ -49,36 +50,15 @@ describe('Blogs', () => {
 
   beforeEach(async ({ page }) => {
     await page.goto(process.env.BASE_WEB_URL)
-    helper.loginUser(page, user)
+    await helper.loginUser(page, user)
   })
+
   test('Create Blog', async ({ page }) => {
     const newBlogContents = {
       title: 'Test blog title',
       author: 'test blog author',
       url: 'http://testblogurl.com',
     }
-    await page.getByRole('button', { name: 'New Blog' }).click()
-    await page.getByLabel('Title:').fill(newBlogContents.title)
-    await page.getByLabel('Author:').fill(newBlogContents.author)
-    await page.getByLabel('URL:').fill(newBlogContents.url)
-    await page.getByRole('button', { name: 'Create' }).click()
-    await expect(page.getByText(`${newBlogContents.title} - ${newBlogContents.author}`)).toBeVisible()
+    await helper.createBlog(page, newBlogContents)
   })
-})
-
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/')
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/)
-})
-
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/')
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click()
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible()
 })

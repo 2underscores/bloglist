@@ -32,7 +32,18 @@ const loginUser = async (page, user) => {
   await expect(page.getByText(`User: ${user.name}`)).toBeVisible()
 }
 
+const createBlog = async (page, blog) => {
+  await page.getByRole('button', { name: 'New Blog' }).click()
+  await page.getByLabel('Title:').fill(blog.title)
+  await page.getByLabel('Author:').fill(blog.author)
+  await page.getByLabel('URL:').fill(blog.url)
+  await expect(page.getByText(`${blog.title} - ${blog.author}`)).not.toBeVisible()
+  await page.getByRole('button', { name: 'Create' }).click()
+  await expect(page.getByText(`${blog.title} - ${blog.author}`)).toBeVisible()
+}
+
 module.exports = {
   injectUser,
   loginUser,
+  createBlog,
 }
